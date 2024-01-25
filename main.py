@@ -19,66 +19,50 @@ def binary_search(mylist, key):
 	""" done. """
 	return _binary_search(mylist, key, 0, len(mylist)-1)
 
+
+
 def _binary_search(mylist, key, left, right):
-	"""
-	Recursive implementation of binary search.
+    if left > right:
+        return -1
 
-	Params:
-	  mylist....list to search
-	  key.......search key
-	  left......left index into list to search
-	  right.....right index into list to search
+    mid = (left + right) // 2
 
-	Returns:
-	  index of key in mylist, or -1 if not present.
-	"""
-	### TODO
-
-	###
+    if mylist[mid] == key:
+        return mid
+    elif mylist[mid] > key:
+        return _binary_search(mylist, key, left, mid - 1)
+    else:
+        return _binary_search(mylist, key, mid + 1, right)
 
 
 
 
 def time_search(search_fn, mylist, key):
-	"""
-	Return the number of milliseconds to run this
-	search function on this list.
+  start_time = time.time() # Record start time
+  search_fn(mylist, key)   # Perform the search
+  end_time = time.time()   # Record end time
 
-	Note 1: `search_fn` parameter is a function.
-	Note 2: time.time() returns the current time in seconds. 
-	You'll have to multiple by 1000 to get milliseconds.
-
-	Params:
-	  sort_fn.....the search function
-	  mylist......the list to search
-	  key.........the search key 
-
-	Returns:
-	  the number of milliseconds it takes to run this
-	  search function on this input.
-	"""
-	### TODO
-
-	###
+  # Calculate time taken in milliseconds
+  time_taken = (end_time - start_time) * 1000 
+  return time_taken
 
 def compare_search(sizes=[1e1, 1e2, 1e3, 1e4, 1e5, 1e6, 1e7]):
-	"""
-	Compare the running time of linear_search and binary_search
-	for input sizes as given. The key for each search should be
-	-1. The list to search for each size contains the numbers from 0 to n-1,
-	sorted in ascending order. 
+  results = []
+  for n in sizes:
+      mylist = list(range(int(n)))  # Create a list from 0 to n-1
+      key = -1  # The key to search for
 
-	You'll use the time_search function to time each call.
+      # Measure time for linear_search
+      linear_time = time_search(linear_search, mylist, key)
 
-	Returns:
-	  A list of tuples of the form
-	  (n, linear_search_time, binary_search_time)
-	  indicating the number of milliseconds it takes
-	  for each method to run on each value of n
-	"""
-	### TODO
+      # Measure time for binary_search
+      binary_time = time_search(binary_search, mylist, key)
 
-	###
+      # Append the results
+      results.append((n, linear_time, binary_time))
+
+  return results
+ 
 
 def print_results(results):
 	""" done """
@@ -87,3 +71,4 @@ def print_results(results):
 							floatfmt=".3f",
 							tablefmt="github"))
 
+print_results(compare_search())
